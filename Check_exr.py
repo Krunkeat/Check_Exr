@@ -2,7 +2,7 @@ import os
 from operator import itemgetter
 from itertools import *
 
-# Shot format based on the Ramses nomenclature 
+# Shot format based on the Ramses nomenclature
 # more info : https://ramses.rxlab.guide/
 
 # Set the path to the desired folder where the exr are located
@@ -19,6 +19,9 @@ for rl in os.listdir(path):
 
     # collect missing frames
     missing_frames = []
+    missing_frames_group = []
+    missing_frames_format = []
+
     if len(os.listdir(rl_path)) > 1:
         exr = os.listdir(rl_path)[0]
         exr = exr.split(".")[0]
@@ -31,11 +34,11 @@ for rl in os.listdir(path):
 
         # Group frames for better lisibility
         for k, g in groupby(enumerate(missing_frames), lambda x: x[0]-x[1]):
-            missing_frames.append(list(map(itemgetter(1), g)))
+            missing_frames_group.append(list(map(itemgetter(1), g)))
 
-        for group in missing_frames:
-            missing_frames.append(f"{min(group)}-{max(group)}")
+        for group in missing_frames_group:
+            missing_frames_format.append(f"{min(group)}-{max(group)}")
     else:
-        missing_frames = "Single frame"
+        missing_frames_format = "Single frame"
 
-    print(f"Render layer:{rl:20} Missing frames: {missing_frames}")
+    print(f"Render layer:{rl:20} Missing frames: {missing_frames_format}")
